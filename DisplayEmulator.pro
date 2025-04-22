@@ -2,11 +2,12 @@
 QT += widgets printsupport
 
 CONFIG += c++17 
+# CONFIG += c++17 console
 
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-		qcustomplot.cpp
+		DisplayOLEDEmulator.cpp 
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -15,4 +16,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     mainwindow.h \
-	qcustomplot.h
+	DisplayOLEDEmulator.h 
