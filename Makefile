@@ -232,6 +232,7 @@ Makefile: DisplayEmulator.pro ../../Qt/5.12.2/mingw73_32/mkspecs/win32-g++/qmake
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/resolve_config.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/exclusive_builds_post.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/default_post.prf \
+		../../Qt/5.12.2/mingw73_32/mkspecs/features/win32/console.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/precompile_header.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/warn_on.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/qt.prf \
@@ -241,7 +242,6 @@ Makefile: DisplayEmulator.pro ../../Qt/5.12.2/mingw73_32/mkspecs/win32-g++/qmake
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/uic.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/qmake_use.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/file_copies.prf \
-		../../Qt/5.12.2/mingw73_32/mkspecs/features/win32/windows.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/testcase_targets.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/exceptions.prf \
 		../../Qt/5.12.2/mingw73_32/mkspecs/features/yacc.prf \
@@ -250,8 +250,7 @@ Makefile: DisplayEmulator.pro ../../Qt/5.12.2/mingw73_32/mkspecs/win32-g++/qmake
 		../../Qt/5.12.2/mingw73_32/lib/Qt5PrintSupport.prl \
 		../../Qt/5.12.2/mingw73_32/lib/Qt5Widgets.prl \
 		../../Qt/5.12.2/mingw73_32/lib/Qt5Gui.prl \
-		../../Qt/5.12.2/mingw73_32/lib/Qt5Core.prl \
-		../../Qt/5.12.2/mingw73_32/lib/qtmain.prl
+		../../Qt/5.12.2/mingw73_32/lib/Qt5Core.prl
 	$(QMAKE) -o Makefile DisplayEmulator.pro
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/spec_pre.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/qdevice.pri:
@@ -422,6 +421,7 @@ Makefile: DisplayEmulator.pro ../../Qt/5.12.2/mingw73_32/mkspecs/win32-g++/qmake
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/resolve_config.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/exclusive_builds_post.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/default_post.prf:
+../../Qt/5.12.2/mingw73_32/mkspecs/features/win32/console.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/precompile_header.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/warn_on.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/qt.prf:
@@ -431,7 +431,6 @@ Makefile: DisplayEmulator.pro ../../Qt/5.12.2/mingw73_32/mkspecs/win32-g++/qmake
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/uic.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/qmake_use.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/file_copies.prf:
-../../Qt/5.12.2/mingw73_32/mkspecs/features/win32/windows.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/testcase_targets.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/exceptions.prf:
 ../../Qt/5.12.2/mingw73_32/mkspecs/features/yacc.prf:
@@ -441,7 +440,6 @@ DisplayEmulator.pro:
 ../../Qt/5.12.2/mingw73_32/lib/Qt5Widgets.prl:
 ../../Qt/5.12.2/mingw73_32/lib/Qt5Gui.prl:
 ../../Qt/5.12.2/mingw73_32/lib/Qt5Core.prl:
-../../Qt/5.12.2/mingw73_32/lib/qtmain.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile DisplayEmulator.pro
 
