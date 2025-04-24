@@ -18,9 +18,13 @@ class ColumnPixels : public QWidget {
 	
 	QRectF Rect[8]; 
 	
+	double pixel_size = 5.0; 
+	
 
 public:
     explicit ColumnPixels(QWidget *parent = nullptr);
+	explicit ColumnPixels(QWidget*, double);
+	
 	void setByte(short int); 
 	
 protected: 
@@ -42,6 +46,8 @@ class DisplayEmulator : public QWidget {
 
 public:
     explicit DisplayEmulator(QWidget *parent = nullptr);
+	explicit DisplayEmulator(QWidget*, double);
+	
 	void setData(short int, int); 
 	
 	

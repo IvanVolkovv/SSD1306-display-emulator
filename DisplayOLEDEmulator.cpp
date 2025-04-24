@@ -12,6 +12,14 @@ ColumnPixels(QWidget *parent) : QWidget(parent){
 }
 
 /*!
+ * @brief:	Конструктор класса для установки размера пикселя
+*/
+ColumnPixels::
+ColumnPixels(QWidget *parent, double pixel_size) : QWidget(parent){
+	this->pixel_size = pixel_size; 
+}
+
+/*!
  * @brief:	Переопределяю виртуальный метод для рисования виджета. 
  * @note: 	Виджет имеет вид столбца из восьми пикселей. 
 */
@@ -28,10 +36,10 @@ paintEvent(QPaintEvent*){
 			painter.setBrush(Qt::black);	
 		
 		Rect[i].setLeft(0.0); 
-		Rect[i].setTop(0.0 + 10.0*i); 
-		Rect[i].setHeight(10.0); 
-		Rect[i].setHeight(10.0); 	
-		Rect[i].setWidth(10.0); 
+		Rect[i].setTop(pixel_size*i); 
+		Rect[i].setHeight(pixel_size); 
+		Rect[i].setHeight(pixel_size); 	
+		Rect[i].setWidth(pixel_size); 
 		painter.drawRoundedRect(Rect[i], 2.0, 2.0);
 	}
 	
@@ -56,18 +64,6 @@ setByte(short int byte){
 DisplayEmulator::
 DisplayEmulator(QWidget *parent) : QWidget(parent){
 
-	// this->setFixedSize(1280, 166); 	// setFixedSize(int w, int h) 
-	
-	// QVBoxLayout *layout = new QVBoxLayout(this);
-	// layout->setSpacing(0); 
-	// QMargins marg(3, 3, 0, 3); 					// QMargins(int left, int top, int right, int bottom)
-	// layout->setContentsMargins(marg); 
-	
-	// ColumnPixels *rows_segment = new ColumnPixels(this); 
-	// ColumnPixels *rows_segment_2 = new ColumnPixels(this); 
-	// layout->addWidget(rows_segment);
-	// layout->addWidget(rows_segment_2);	
-	
 	this->setFixedSize(1286, 326); 	// setFixedSize(int w, int h) 
 	
 	QGridLayout *layout = new QGridLayout(this);
@@ -75,23 +71,8 @@ DisplayEmulator(QWidget *parent) : QWidget(parent){
 	QMargins marg(3, 3, 3, 3); 					// QMargins(int left, int top, int right, int bottom)
 	layout->setContentsMargins(marg); 
 	 
-	/* 
-	ColumnPixels *rows_segment = new ColumnPixels(this); 
-	ColumnPixels *rows_segment_2 = new ColumnPixels(this); 
-	layout->addWidget(rows_segment, 0, 0);
-	layout->addWidget(rows_segment_2, 0, 1);	
-	 */
-	
-	// ColumnPixels *ColumnP[8] = {	new ColumnPixels(this), new ColumnPixels(this), new ColumnPixels(this), new ColumnPixels(this), new ColumnPixels(this) };  
-	
-	
-	// QVector <ColumnPixels*> ColumnP;
-	
 	for(int i = 0; i < 512; ++i)
 		ColumnP.push_back( new ColumnPixels(this) ); 
-	
-	
-	// layout->addWidget(ColumnP[0], 0, 0);
 	
 	for(int i = 0; i < 4; ++i){
 		
@@ -100,13 +81,40 @@ DisplayEmulator(QWidget *parent) : QWidget(parent){
 		
 	}
 	
-	
-	
-	// ColumnP[5]->setByte(1); 
-	
-	
-	  
 }
+
+DisplayEmulator::
+DisplayEmulator(QWidget *parent, double size_pixel) : QWidget(parent){
+
+
+	int w = 128 * size_pixel; 
+	int h = 32 * size_pixel; 
+
+	this->setFixedSize(w, h); 	// setFixedSize(int w, int h) 
+	
+	QGridLayout *layout = new QGridLayout(this);
+	layout->setSpacing(0); 	
+	QMargins marg(3, 3, 3, 3); 					// QMargins(int left, int top, int right, int bottom)
+	layout->setContentsMargins(marg); 
+	 
+	for(int i = 0; i < 512; ++i)
+		ColumnP.push_back( new ColumnPixels(this, size_pixel) ); 
+	
+	for(int i = 0; i < 4; ++i){
+		
+		for(int j = i * 128, k = 0; j < (i+1) * 128, k < 128; ++j, ++k)
+			layout->addWidget(ColumnP[j], i, k);
+		
+	}
+	
+}
+
+
+
+
+
+
+
 
 void DisplayEmulator::
 paintEvent(QPaintEvent*){

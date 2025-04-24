@@ -42,7 +42,7 @@ createFormCentralWidget(void){
 	
 	layout->addWidget(NameDisplayEmulator);
 	
-	Rows = new DisplayEmulator(wgt); 
+	Rows = new DisplayEmulator(wgt, 10.0); 
 	layout->addWidget(Rows);
 	
 	/* DEBUG ------------------------------------- */ 
@@ -55,8 +55,6 @@ createFormCentralWidget(void){
 	ButtonOpenFile = new QPushButton("&Open file", wgt);
 	layout->addWidget(ButtonOpenFile);
 	connect(ButtonOpenFile, SIGNAL(clicked()), this, SLOT(buttonClickHandler_OpenFile()));
-	
-	
 	
 	ButtonUpdateFile = new QPushButton("&Update file", wgt);
 	layout->addWidget(ButtonUpdateFile);
@@ -102,13 +100,10 @@ slotTimerAlarm(void){
 */
 void MainWindow::
 buttonClickHandler_OpenFile(void){
-
-	qDebug() << "buttonClickHandler_OpenFile"; 
 	
 	NameOpenFile = QFileDialog::getOpenFileName(this, "Open the file", "");                            
                                                                                
-	qDebug() << NameOpenFile; 
-	
+	// checking file is open
 	if( NameOpenFile == "" )
 		return; 
 	
@@ -118,37 +113,16 @@ buttonClickHandler_OpenFile(void){
 		return;
 		
 	QByteArray data;
+	data.clear(); 
+	data = file.readAll(); 
 	
-	// data = file.readAll(); 
-	
-	
-	qint64 bufSize = 2;
-	char buf[100];
-	
-	// while (!file.atEnd()) {
-		file.read(buf, bufSize);
-	// }
-	
-	
+	// close file
 	file.close(); 
 	
-	qDebug() << buf[0];
-	qDebug() << buf[1];
-	qDebug() << buf[2];	
-	
-	
-	
-	Rows->setData(buf[0], 0); 
-	Rows->setData(buf[1], 1); 
-	Rows->setData(buf[2], 2); 
-	
-	
-	
-	
-	
-	
-	
-	
+	// Adding data for display on the display emulator
+	for(int i = 0; i < 512; ++i){
+		Rows->setData(data[i], i); 
+	}
 	
 }
 
@@ -158,16 +132,26 @@ buttonClickHandler_OpenFile(void){
 void MainWindow::
 buttonClickHandler_UpdateFile(void){
 	
-	qDebug() << "buttonClickHandler_UpdateFile"; 
+	QFile file(NameOpenFile); 
 	
+	// checking file is open
+	if( NameOpenFile == "" )
+		return; 
+	
+	if( !file.open(QIODevice::ReadOnly | QIODevice::Text) )
+		return;
+		
+	QByteArray data;
+	data.clear(); 
+	data = file.readAll(); 
+	
+	// close file
+	file.close(); 
+	
+	// Adding data for display on the display emulator
+	for(int i = 0; i < 512; ++i){
+		Rows->setData(data[i], i); 
+	}
+		
 }
-
-
-
-
-
-
-
-
-
 
