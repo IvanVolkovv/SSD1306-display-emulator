@@ -43,10 +43,28 @@ class DisplayEmulator : public QWidget {
 	/* --------- */
 
 	QVector <ColumnPixels*> ColumnP;
+	
+	// кол-во страниц дисплея
+	int number_pages = 4; 
+	
+	
+	
+	
+	/* 
+		высота виджета должна быть привязана к кол-ву страниц: 
+		4 страницы для 128 х 32
+		8 страниц для 128 х 64
+		ширина у всех одинаковая - 128 пикселей 
+	*/ 
+	
+	
+	
+	
+	
 
 public:
     explicit DisplayEmulator(QWidget *parent = nullptr);
-	explicit DisplayEmulator(QWidget*, double);
+	explicit DisplayEmulator(QWidget*, int, int);
 	
 	void setData(short int, int); 
 	

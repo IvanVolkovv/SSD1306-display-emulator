@@ -26,8 +26,11 @@ MainWindow(QWidget *parent) : QMainWindow(parent){
 void MainWindow::
 createFormCentralWidget(void){
 
-	QWidget *wgt = new QWidget(this);
-	QVBoxLayout *layout = new QVBoxLayout(wgt);
+	// QWidget *wgt = new QWidget(this);
+	wgt = new QWidget(this);
+	
+	// QVBoxLayout *layout = new QVBoxLayout(wgt);
+	layout = new QVBoxLayout(wgt);
 	
 	QLabel *NameDisplayEmulator = new QLabel(wgt); 
 	
@@ -40,10 +43,10 @@ createFormCentralWidget(void){
 	Font.setPixelSize(30); 
 	NameDisplayEmulator->setFont(Font); 
 	
-	layout->addWidget(NameDisplayEmulator);
+	layout->addWidget(NameDisplayEmulator, 0);
 	
-	Rows = new DisplayEmulator(wgt, 10.0); 
-	layout->addWidget(Rows);
+	Rows = new DisplayEmulator(wgt, 4, 10); 
+	layout->addWidget(Rows, 1);
 	
 	/* DEBUG ------------------------------------- */ 
 	// ColumnPixels *pixel = new ColumnPixels(wgt); 
@@ -53,11 +56,11 @@ createFormCentralWidget(void){
 	
 	
 	ButtonOpenFile = new QPushButton("&Open file", wgt);
-	layout->addWidget(ButtonOpenFile);
+	layout->addWidget(ButtonOpenFile, 2);
 	connect(ButtonOpenFile, SIGNAL(clicked()), this, SLOT(buttonClickHandler_OpenFile()));
 	
 	ButtonUpdateFile = new QPushButton("&Update file", wgt);
-	layout->addWidget(ButtonUpdateFile);
+	layout->addWidget(ButtonUpdateFile, 3);
 	connect(ButtonUpdateFile, SIGNAL(clicked()), this, SLOT(buttonClickHandler_UpdateFile()));
 	
 	setCentralWidget(wgt);
@@ -71,8 +74,24 @@ void MainWindow::
 createMenus(void){
 	
 	MenuBar = new QMenuBar(this); 
-	this->setMenuBar(MenuBar); 	
+	this->setMenuBar(MenuBar); 
+
+ 	/* MENU: File ----------------------------------------------------------------------------------- */ 
 	FileMenu = this->menuBar()->addMenu(tr("&File"));
+	
+	/* MENU: Size display --------------------------------------------------------------------------- */ 
+	SetSizeDisplayMenu = this->menuBar()->addMenu(tr("&Size display"));
+	QAction *SetSize128x32Act = new QAction("128 x 32", this);
+	QAction *SetSize128x64Act = new QAction("128 x 64", this);
+	
+	SetSizeDisplayMenu->addAction(SetSize128x32Act); 
+	SetSizeDisplayMenu->addAction(SetSize128x64Act);
+
+	connect(SetSize128x32Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSize128x32()));
+	connect(SetSize128x64Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSize128x64()));	
+	
+	
+	
 	
 }
 
@@ -154,4 +173,45 @@ buttonClickHandler_UpdateFile(void){
 	}
 		
 }
+
+/*!
+ * @brief:	Слот для обработки пункта меню установки размера дисплея - 128х32 пикселя
+*/
+void MainWindow::
+triggeredHandler_SetSize128x32(void){
+	
+	// qDebug() << "triggeredHandler_SetSize128x32"; 
+	
+	
+	delete Rows; 
+	// Rows = nullptr; 
+	
+	Rows = new DisplayEmulator(wgt, 4, 10); 
+	layout->insertWidget(1, Rows); 
+	
+	
+}
+
+/*!
+ * @brief:	Слот для обработки пункта меню установки размера дисплея - 128х64 пикселя
+*/
+void MainWindow::
+triggeredHandler_SetSize128x64(void){
+	
+	
+	
+	delete Rows; 
+	// Rows = nullptr; 
+	
+	Rows = new DisplayEmulator(wgt, 8, 10); 
+	layout->insertWidget(1, Rows); 
+	
+	
+	
+	
+}
+
+
+
+
 

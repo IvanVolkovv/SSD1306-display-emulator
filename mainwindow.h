@@ -24,6 +24,10 @@ class MainWindow : public QMainWindow {
 
 	QMenuBar *MenuBar = nullptr; 							// Создаю объект класса для работы с QMenuBar
 	QMenu *FileMenu = nullptr; 
+	QMenu *SetSizeDisplayMenu = nullptr; 
+
+	QWidget *wgt = nullptr; 
+	QVBoxLayout *layout = nullptr; 
 
 	ColumnPixels *pixel = nullptr; 
 	DisplayEmulator *Rows = nullptr;
@@ -52,7 +56,9 @@ private slots:
 	void buttonClickHandler_OpenFile(void); 
 	void buttonClickHandler_UpdateFile(void); 
 	
-	
+	// for Actions
+	void triggeredHandler_SetSize128x32(void); 
+	void triggeredHandler_SetSize128x64(void); 
 	
 	
 	

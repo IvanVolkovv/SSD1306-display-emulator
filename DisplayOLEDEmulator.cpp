@@ -84,23 +84,25 @@ DisplayEmulator(QWidget *parent) : QWidget(parent){
 }
 
 DisplayEmulator::
-DisplayEmulator(QWidget *parent, double size_pixel) : QWidget(parent){
+DisplayEmulator(QWidget *parent, int num_pages, int size_pixel) : QWidget(parent){
 
+	this->number_pages = num_pages; 
 
-	int w = 128 * size_pixel; 
-	int h = 32 * size_pixel; 
-
-	this->setFixedSize(w, h); 	// setFixedSize(int w, int h) 
+	int width_widget_base = 128 * size_pixel; 
+	int height_widget_base = number_pages * 8 * size_pixel; 
+	this->setFixedSize(width_widget_base + 6, height_widget_base + 6); 
 	
 	QGridLayout *layout = new QGridLayout(this);
 	layout->setSpacing(0); 	
 	QMargins marg(3, 3, 3, 3); 					// QMargins(int left, int top, int right, int bottom)
 	layout->setContentsMargins(marg); 
 	 
-	for(int i = 0; i < 512; ++i)
+	int number_segments = number_pages * 128; 
+	 
+	for(int i = 0; i < number_segments; ++i)
 		ColumnP.push_back( new ColumnPixels(this, size_pixel) ); 
 	
-	for(int i = 0; i < 4; ++i){
+	for(int i = 0; i < number_pages; ++i){
 		
 		for(int j = i * 128, k = 0; j < (i+1) * 128, k < 128; ++j, ++k)
 			layout->addWidget(ColumnP[j], i, k);
@@ -109,16 +111,8 @@ DisplayEmulator(QWidget *parent, double size_pixel) : QWidget(parent){
 	
 }
 
-
-
-
-
-
-
-
 void DisplayEmulator::
 paintEvent(QPaintEvent*){
-
 
 	QPainter painter(this);
 	
@@ -126,22 +120,17 @@ paintEvent(QPaintEvent*){
 	pen.setColor(Qt::red);
 	pen.setWidth(3);
 	painter.setPen(pen);
-	
 	painter.setBrush(Qt::blue);
-	
 	
 	QRectF rectangle_1(0.0, 0.0, width(), height());
 	painter.drawRoundedRect(rectangle_1, 1.0, 1.0);
-	
 	
 }
 
 void DisplayEmulator::
 setData(short int data, int number){
 	
-	
 	ColumnP[number]->setByte(data); 
-	
 	
 }
 
