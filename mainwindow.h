@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow {
 	QMenuBar *MenuBar = nullptr; 							// Создаю объект класса для работы с QMenuBar
 	QMenu *FileMenu = nullptr; 
 	QMenu *SetSizeDisplayMenu = nullptr; 
+	QMenu *SetSizePixelMenu = nullptr; 
 
 	QWidget *wgt = nullptr; 
 	QVBoxLayout *layout = nullptr; 
@@ -36,9 +37,17 @@ class MainWindow : public QMainWindow {
 	
 	QString NameOpenFile; 
 	
+	QLabel *NameDisplayEmulator = nullptr;
+	
+	
+	
 	// Buttons
 	QPushButton *ButtonOpenFile; 
 	QPushButton *ButtonUpdateFile; 
+	
+	// var
+	int size_pixel = 10; 
+	int number_pages = 4; 
 	
 
 public:
@@ -60,8 +69,10 @@ private slots:
 	void triggeredHandler_SetSize128x32(void); 
 	void triggeredHandler_SetSize128x64(void); 
 	
-	
-	
+	void triggeredHandler_SetSizePixl_2x2Act(void);
+	void triggeredHandler_SetSizePixl_4x4Act(void);
+	void triggeredHandler_SetSizePixl_8x8Act(void);
+	void triggeredHandler_SetSizePixl_10x10Act(void);
 
 
 };

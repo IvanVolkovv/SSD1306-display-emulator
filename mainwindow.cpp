@@ -3,9 +3,13 @@
 MainWindow::
 MainWindow(QWidget *parent) : QMainWindow(parent){
 
-    this->setWindowTitle("OLED Display Emulator 0.1.0");
-    this->setMinimumHeight(500);
-    this->setMinimumWidth(500);
+    this->setWindowTitle("OLED Display Emulator 0.1.1");
+    // this->setMinimumHeight(500);
+    // this->setMinimumWidth(1300);
+	
+	this->setFixedSize(1305, 500); 
+	
+	
 	
 	// вызывю ф-ю для создания меню
 	createMenus(); 
@@ -32,7 +36,8 @@ createFormCentralWidget(void){
 	// QVBoxLayout *layout = new QVBoxLayout(wgt);
 	layout = new QVBoxLayout(wgt);
 	
-	QLabel *NameDisplayEmulator = new QLabel(wgt); 
+	// QLabel *NameDisplayEmulator = new QLabel(wgt);
+	NameDisplayEmulator = new QLabel(wgt); 	
 	
 	NameDisplayEmulator->setText("Display 128 x 32 pixels"); 
 	NameDisplayEmulator->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -40,7 +45,7 @@ createFormCentralWidget(void){
 	
 	QFont Font;
 	Font.setBold(true); 
-	Font.setPixelSize(30); 
+	Font.setPixelSize(15); 
 	NameDisplayEmulator->setFont(Font); 
 	
 	layout->addWidget(NameDisplayEmulator, 0);
@@ -56,11 +61,15 @@ createFormCentralWidget(void){
 	
 	
 	ButtonOpenFile = new QPushButton("&Open file", wgt);
-	layout->addWidget(ButtonOpenFile, 2);
+	ButtonOpenFile->setMaximumSize(100, 50); 
+	ButtonOpenFile->setMinimumSize(50, 25); 
+	layout->addWidget(ButtonOpenFile);
 	connect(ButtonOpenFile, SIGNAL(clicked()), this, SLOT(buttonClickHandler_OpenFile()));
 	
 	ButtonUpdateFile = new QPushButton("&Update file", wgt);
-	layout->addWidget(ButtonUpdateFile, 3);
+	ButtonUpdateFile->setMaximumSize(100, 50); 
+	ButtonUpdateFile->setMinimumSize(50, 25); 
+	layout->addWidget(ButtonUpdateFile);
 	connect(ButtonUpdateFile, SIGNAL(clicked()), this, SLOT(buttonClickHandler_UpdateFile()));
 	
 	setCentralWidget(wgt);
@@ -90,6 +99,20 @@ createMenus(void){
 	connect(SetSize128x32Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSize128x32()));
 	connect(SetSize128x64Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSize128x64()));	
 	
+	/* MENU: Size pixel ----------------------------------------------------------------------------- */ 
+	SetSizePixelMenu = this->menuBar()->addMenu(tr("&Size pixel"));
+	QAction *SetSizePixl_2x2Act = new QAction("2 x 2", this);
+	QAction *SetSizePixl_4x4Act = new QAction("4 x 4", this);
+	QAction *SetSizePixl_8x8Act = new QAction("8 x 8", this);
+	QAction *SetSizePixl_10x10Act = new QAction("10 x 10", this);
+	SetSizePixelMenu->addAction(SetSizePixl_2x2Act); 
+	SetSizePixelMenu->addAction(SetSizePixl_4x4Act);
+	SetSizePixelMenu->addAction(SetSizePixl_8x8Act); 
+	SetSizePixelMenu->addAction(SetSizePixl_10x10Act);
+	connect(SetSizePixl_2x2Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSizePixl_2x2Act()));
+	connect(SetSizePixl_4x4Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSizePixl_4x4Act()));
+	connect(SetSizePixl_8x8Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSizePixl_8x8Act()));
+	connect(SetSizePixl_10x10Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSizePixl_10x10Act()));
 	
 	
 	
@@ -180,13 +203,23 @@ buttonClickHandler_UpdateFile(void){
 void MainWindow::
 triggeredHandler_SetSize128x32(void){
 	
-	// qDebug() << "triggeredHandler_SetSize128x32"; 
 	
+	number_pages = 4; 
+	
+	int height_mainwindow = number_pages * 8 * size_pixel; 
+	height_mainwindow += 200; 
+	
+	this->setFixedSize(1305, height_mainwindow); 
+	
+	
+	// qDebug() << "triggeredHandler_SetSize128x32"; 
+	NameDisplayEmulator->setText("Display 128 x 32 pixels"); 
 	
 	delete Rows; 
 	// Rows = nullptr; 
 	
-	Rows = new DisplayEmulator(wgt, 4, 10); 
+	number_pages = 4; 
+	Rows = new DisplayEmulator(wgt, number_pages, size_pixel); 
 	layout->insertWidget(1, Rows); 
 	
 	
@@ -198,18 +231,55 @@ triggeredHandler_SetSize128x32(void){
 void MainWindow::
 triggeredHandler_SetSize128x64(void){
 	
+	number_pages = 8; 
 	
+	int height_mainwindow = number_pages * 8 * size_pixel; 
+	height_mainwindow += 200; 
+	
+	this->setFixedSize(1305, height_mainwindow); 
+	
+	
+	NameDisplayEmulator->setText("Display 128 x 64 pixels"); 
 	
 	delete Rows; 
 	// Rows = nullptr; 
 	
-	Rows = new DisplayEmulator(wgt, 8, 10); 
+	
+	Rows = new DisplayEmulator(wgt, number_pages, size_pixel); 
 	layout->insertWidget(1, Rows); 
 	
-	
-	
-	
 }
+
+void MainWindow::
+triggeredHandler_SetSizePixl_2x2Act(void){
+	qDebug() << "triggeredHandler_SetSizePixl_2x2Act"; 
+}
+
+void MainWindow::
+triggeredHandler_SetSizePixl_4x4Act(void){
+	qDebug() << "triggeredHandler_SetSizePixl_4x4Act"; 
+}
+
+void MainWindow::
+triggeredHandler_SetSizePixl_8x8Act(void){
+	qDebug() << "triggeredHandler_SetSizePixl_8x8Act"; 
+}
+
+void MainWindow::
+triggeredHandler_SetSizePixl_10x10Act(void){
+	qDebug() << "triggeredHandler_SetSizePixl_10x10Act"; 
+}
+	
+
+
+
+
+
+
+
+
+
+
 
 
 
