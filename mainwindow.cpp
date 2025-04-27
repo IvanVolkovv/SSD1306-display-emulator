@@ -3,24 +3,11 @@
 MainWindow::
 MainWindow(QWidget *parent) : QMainWindow(parent){
 
-    this->setWindowTitle("OLED Display Emulator 0.1.1");
-    // this->setMinimumHeight(500);
-    // this->setMinimumWidth(1300);
+	// Oled Display Emulator
+    this->setWindowTitle("ODE 0.1.3");
 	
-	this->setFixedSize(1305, 500); 
-	
-	
-	
-	// вызывю ф-ю для создания меню
 	createMenus(); 
-	// тут вызываю ф-ю, которая создаёт и компанует все элементы центрального виджета главного окна
 	createFormCentralWidget(); 
-	
-	
-	/* TIMER ------------------------------------------------------------ */ 
-	timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerAlarm()));
-	// timer->start(50); 
 		
 }
 
@@ -30,15 +17,10 @@ MainWindow(QWidget *parent) : QMainWindow(parent){
 void MainWindow::
 createFormCentralWidget(void){
 
-	// QWidget *wgt = new QWidget(this);
 	wgt = new QWidget(this);
-	
-	// QVBoxLayout *layout = new QVBoxLayout(wgt);
 	layout = new QVBoxLayout(wgt);
 	
-	// QLabel *NameDisplayEmulator = new QLabel(wgt);
 	NameDisplayEmulator = new QLabel(wgt); 	
-	
 	NameDisplayEmulator->setText("Display 128 x 32 pixels"); 
 	NameDisplayEmulator->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 	NameDisplayEmulator->setScaledContents(true); 
@@ -50,29 +32,36 @@ createFormCentralWidget(void){
 	
 	layout->addWidget(NameDisplayEmulator, 0);
 	
-	Rows = new DisplayEmulator(wgt, 4, 10); 
-	layout->addWidget(Rows, 1);
-	
-	/* DEBUG ------------------------------------- */ 
-	// ColumnPixels *pixel = new ColumnPixels(wgt); 
-	// pixel = new ColumnPixels(wgt); 
-	// layout->addWidget(pixel);
-	/*-------------------------------------------- */ 
-	
+	QHBoxLayout *LayoutButton = new QHBoxLayout(wgt); 
 	
 	ButtonOpenFile = new QPushButton("&Open file", wgt);
 	ButtonOpenFile->setMaximumSize(100, 50); 
 	ButtonOpenFile->setMinimumSize(50, 25); 
-	layout->addWidget(ButtonOpenFile);
+	// layout->addWidget(ButtonOpenFile);
+	LayoutButton->addWidget(ButtonOpenFile);
 	connect(ButtonOpenFile, SIGNAL(clicked()), this, SLOT(buttonClickHandler_OpenFile()));
 	
 	ButtonUpdateFile = new QPushButton("&Update file", wgt);
 	ButtonUpdateFile->setMaximumSize(100, 50); 
 	ButtonUpdateFile->setMinimumSize(50, 25); 
-	layout->addWidget(ButtonUpdateFile);
+	// layout->addWidget(ButtonUpdateFile);
+	LayoutButton->addWidget(ButtonUpdateFile);
 	connect(ButtonUpdateFile, SIGNAL(clicked()), this, SLOT(buttonClickHandler_UpdateFile()));
 	
+	SaveImgDisplay = new QPushButton("&Save Display", wgt);
+	SaveImgDisplay->setMaximumSize(100, 50); 
+	SaveImgDisplay->setMinimumSize(50, 25); 
+	// layout->addWidget(ButtonUpdateFile);
+	LayoutButton->addWidget(SaveImgDisplay);
+	connect(SaveImgDisplay, SIGNAL(clicked()), this, SLOT(buttonClickHandler_SaveImgDisplay()));
+	
+	LayoutButton->addStretch(1); 
+	
+	layout->addLayout(LayoutButton, 0);
+	
 	setCentralWidget(wgt);
+	
+	rebuildMainWindow(number_pages, size_pixel); 
 	
 }
 
@@ -86,7 +75,7 @@ createMenus(void){
 	this->setMenuBar(MenuBar); 
 
  	/* MENU: File ----------------------------------------------------------------------------------- */ 
-	FileMenu = this->menuBar()->addMenu(tr("&File"));
+	// FileMenu = this->menuBar()->addMenu(tr("&File"));
 	
 	/* MENU: Size display --------------------------------------------------------------------------- */ 
 	SetSizeDisplayMenu = this->menuBar()->addMenu(tr("&Size display"));
@@ -113,29 +102,34 @@ createMenus(void){
 	connect(SetSizePixl_4x4Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSizePixl_4x4Act()));
 	connect(SetSizePixl_8x8Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSizePixl_8x8Act()));
 	connect(SetSizePixl_10x10Act, SIGNAL(triggered()), this, SLOT(triggeredHandler_SetSizePixl_10x10Act()));
-	
-	
-	
+		
 }
 
-
-/* SLOTS --------------------------------------------------------------------------------------------- */ 
- 
 /*!
- * @brief:	Слот для обработки timeout() таймера
+ * @brief:	Функция для перерисовки главного окна. 
+ * @param:	number_pages - кол-во страниц дисплея; 
+ * 			pixel_size - размер пикселя. 
+ * @note: 	Размер главного окна зависит от размера виджета OLED дисплея. 
 */
 void MainWindow::
-slotTimerAlarm(void){
+rebuildMainWindow(int number_pages, int pixel_size){
 	
-  	// qDebug() << " Timer ";
+	delete Rows; 
+	// Rows = nullptr; 
+	Rows = new DisplayEmulator(wgt, number_pages, pixel_size); 
+	layout->insertWidget(1, Rows); 	
 	
-	static short int i = 0; 
-	++i; 
+	int height_mainwindow = number_pages * 8 * pixel_size; 
+	height_mainwindow += 150; 
 	
-	for(int j = 0; j < 512; ++j)
-		Rows->setData(i, j); 
+	int width_mainwindow = 128 * pixel_size + 6; 
+	width_mainwindow += 20; 
+	
+	this->setFixedSize(width_mainwindow, height_mainwindow); 
 	
 }
+
+/* SLOTS --------------------------------------------------------------------------------------------- */ 
 
 /*!
  * @brief:	Слот для обработки нажатия на кнопку для выбора файла с данными на загрузку для отображения на эмуляторе дисплея
@@ -198,31 +192,31 @@ buttonClickHandler_UpdateFile(void){
 }
 
 /*!
+ * @brief:	Слот для обработки нажатия на кнопку для сохранения изображения на дисплее
+*/
+void MainWindow::
+buttonClickHandler_SaveImgDisplay(void){
+
+	QString Format;
+	QString DirLocation = QFileDialog::getSaveFileName(this, tr("Save Image"), "DisplayImag", ".png", &Format);
+
+	if( !DirLocation.isEmpty() ){                 
+		if( Format.contains("png") ){     
+			QPixmap pixmap(Rows->size());
+			Rows->render(&pixmap);
+			pixmap.save(DirLocation + Format, nullptr, 0); 			                                                      
+		}
+	}
+}	
+
+/*!
  * @brief:	Слот для обработки пункта меню установки размера дисплея - 128х32 пикселя
 */
 void MainWindow::
 triggeredHandler_SetSize128x32(void){
-	
-	
 	number_pages = 4; 
-	
-	int height_mainwindow = number_pages * 8 * size_pixel; 
-	height_mainwindow += 200; 
-	
-	this->setFixedSize(1305, height_mainwindow); 
-	
-	
-	// qDebug() << "triggeredHandler_SetSize128x32"; 
 	NameDisplayEmulator->setText("Display 128 x 32 pixels"); 
-	
-	delete Rows; 
-	// Rows = nullptr; 
-	
-	number_pages = 4; 
-	Rows = new DisplayEmulator(wgt, number_pages, size_pixel); 
-	layout->insertWidget(1, Rows); 
-	
-	
+	rebuildMainWindow(number_pages, size_pixel); 
 }
 
 /*!
@@ -230,58 +224,44 @@ triggeredHandler_SetSize128x32(void){
 */
 void MainWindow::
 triggeredHandler_SetSize128x64(void){
-	
 	number_pages = 8; 
-	
-	int height_mainwindow = number_pages * 8 * size_pixel; 
-	height_mainwindow += 200; 
-	
-	this->setFixedSize(1305, height_mainwindow); 
-	
-	
 	NameDisplayEmulator->setText("Display 128 x 64 pixels"); 
-	
-	delete Rows; 
-	// Rows = nullptr; 
-	
-	
-	Rows = new DisplayEmulator(wgt, number_pages, size_pixel); 
-	layout->insertWidget(1, Rows); 
-	
+	rebuildMainWindow(number_pages, size_pixel); 
 }
 
+/*!
+ * @brief:	Слот для обработки пункта меню установки размера пикселя - 2 х 2 пикселя
+*/
 void MainWindow::
 triggeredHandler_SetSizePixl_2x2Act(void){
-	qDebug() << "triggeredHandler_SetSizePixl_2x2Act"; 
+	size_pixel = 2; 
+	rebuildMainWindow(number_pages, size_pixel); 
 }
 
+/*!
+ * @brief:	Слот для обработки пункта меню установки размера пикселя - 4 х 4 пикселя
+*/
 void MainWindow::
 triggeredHandler_SetSizePixl_4x4Act(void){
-	qDebug() << "triggeredHandler_SetSizePixl_4x4Act"; 
+	size_pixel = 4; 
+	rebuildMainWindow(number_pages, size_pixel); 
 }
 
+/*!
+ * @brief:	Слот для обработки пункта меню установки размера пикселя - 8 х 8 пикселя
+*/
 void MainWindow::
 triggeredHandler_SetSizePixl_8x8Act(void){
-	qDebug() << "triggeredHandler_SetSizePixl_8x8Act"; 
+	size_pixel = 8; 
+	rebuildMainWindow(number_pages, size_pixel); 
 }
 
+/*!
+ * @brief:	Слот для обработки пункта меню установки размера пикселя - 10 х 10 пикселя
+*/
 void MainWindow::
 triggeredHandler_SetSizePixl_10x10Act(void){
-	qDebug() << "triggeredHandler_SetSizePixl_10x10Act"; 
+	size_pixel = 10; 
+	rebuildMainWindow(number_pages, size_pixel); 
 }
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,7 +5,8 @@
 
 int main(int argc, char *argv[]){
 
-    QApplication app(argc, argv);               
+    QApplication app(argc, argv); 
+	app.setStyle("fusion"); 	
 	MainWindow GeneralWindow;
     GeneralWindow.show();
     return app.exec();                        
