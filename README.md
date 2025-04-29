@@ -6,6 +6,7 @@
 
 ### Как пользоваться программой?
 Последовательность действий, которая раскрывает основную суть применения программы показана на рисунке ниже.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/e0739929-0c9c-46d3-95fc-6480b93d1d10">
+</p>
 
-
-![use_programm](https://github.com/user-attachments/assets/e0739929-0c9c-46d3-95fc-6480b93d1d10)
